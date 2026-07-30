@@ -3,7 +3,7 @@
 ## TL;DR
 
 - **Recommendation:** AssemblyAI Universal-3.5 Pro Streaming, with `language_detection` + `language_codes` for bilingual auto-routing, `voice_focus: near-field` for handheld noise suppression, and `mode: max_accuracy` tuned for conversational (not IVR-speed) turn-taking.
-- **Top 3 accuracy wins over iTranslate's likely current setup:** (1) native mid-sentence code-switching across 18 languages instead of a fixed source-language toggle, (2) server-side noise suppression tuned for close-talking handheld mics, (3) keyterms/prompting to boost accuracy on travel, medical, or brand-specific vocabulary without retraining anything.
+- **Top 3 accuracy wins:** (1) native mid-sentence code-switching across 18 languages instead of a fixed source-language toggle, (2) server-side noise suppression tuned for close-talking handheld mics, (3) keyterms/prompting to boost accuracy on travel, medical, or brand-specific vocabulary without retraining anything.
 - **Cost:** $0.45/hr ($0.0075/min) of session time for Universal-3.5 Pro Streaming — billed on WebSocket-open duration, not audio sent; see [Cost model](#cost-model).
 
 ## What we heard from iTranslate
