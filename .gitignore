@@ -3,5 +3,5 @@ __pycache__/
 *.pyc
 venv/
 .venv/
-samples/*.wav
-samples/*.mp3
+iTranslate/samples/*.wav
+iTranslate/samples/*.mp3
