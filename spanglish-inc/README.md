@@ -2,6 +2,8 @@
 
 Part 2 of the take-home ([repo root](../README.md)). A production customer (Spanglish Inc., English/Spanish note-taking for court proceedings) reported their AssemblyAI streaming integration "doesn't work at all." Their assigned Applied AI Engineer was out of office; this covers the diagnosis, fix, and the resulting communications while covering their account.
 
+**[Loom walkthrough](https://www.loom.com/share/7f5867e61e054412b2519518739519b5)**
+
 ## Suggested reading order
 
 1. **[`ENG_SUMMARY.md`](./ENG_SUMMARY.md)** — start here for the technical grounding. TL;DR: not a bug on AssemblyAI's side, two client-side misconfigurations, both reproduced live against the production streaming endpoint (not just inferred from reading the code).

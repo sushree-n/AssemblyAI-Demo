@@ -4,6 +4,8 @@ Part 1 of the take-home ([repo root](../README.md)). A reference implementation 
 
 See [APPROACH.md](./APPROACH.md) for the actual deliverable: the customer-facing writeup on architecture, why each AssemblyAI feature was chosen, device deployment constraints, and cost model. The code here exists to prove that writeup isn't speculative.
 
+**[Loom walkthrough](https://www.loom.com/share/e3958f5081954ba4a0395ec3fd9ea448)**
+
 ## Setup
 
 ```bash
