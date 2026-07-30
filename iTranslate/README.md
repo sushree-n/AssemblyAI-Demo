@@ -1,8 +1,8 @@
 # iTranslate Demo
 
-A reference implementation of a two-way bilingual conversation pipeline for a handheld translation device: mic → AssemblyAI streaming STT (auto language detection) → DeepL translation → ElevenLabs TTS → playback.
+Part 1 of the take-home ([repo root](../README.md)). A reference implementation of a two-way bilingual conversation pipeline for a handheld translation device: mic → AssemblyAI streaming STT (auto language detection) → DeepL translation → ElevenLabs TTS → playback.
 
-See [APPROACH.md](./APPROACH.md) for the customer-facing writeup on architecture, accuracy recommendations, and cost model.
+See [APPROACH.md](./APPROACH.md) for the actual deliverable: the customer-facing writeup on architecture, why each AssemblyAI feature was chosen, device deployment constraints, and cost model. The code here exists to prove that writeup isn't speculative.
 
 ## Setup
 
@@ -21,9 +21,15 @@ Fill in `.env` with your AssemblyAI, DeepL, and ElevenLabs API keys, and one Ele
 python itranslate.py
 ```
 
-Speak in either configured language (default English/Hindi); the other party's translated, spoken reply plays back automatically.
+Speak in either configured language (default English/Hindi); the other party's translated, spoken reply plays back automatically. Ctrl+C to stop.
 
 ## Requirements
 
 - Python 3.10+
 - A working microphone and speaker
+
+## Files
+
+- [`itranslate.py`](./itranslate.py) — the demo
+- [`APPROACH.md`](./APPROACH.md) — the writeup (start here)
+- [`CLAUDE.md`](./CLAUDE.md) — project-specific notes for anyone extending this with an AI coding agent
