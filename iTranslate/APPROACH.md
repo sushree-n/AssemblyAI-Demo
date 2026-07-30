@@ -49,7 +49,7 @@ We also tested a genuine off-pair edge case: a user speaking Spanish (a language
 | No GPU / no on-device compute | Cloud STT is required — confirmed above. Keep the device's job limited to audio capture, playback, and network I/O. |
 | Cellular bandwidth | Send audio as Opus (`encoding: opus` or `ogg_opus`) instead of raw 16-bit PCM — roughly 8× less bandwidth for the same audio, which matters a lot on a metered cellular connection. `pcm_mulaw` is also a supported streaming encoding (8-bit companded PCM) if the device's audio pipeline can't produce Opus, but Opus is the better tradeoff where available. |
 | Cellular reliability | Streaming sessions bill on **WebSocket-open duration**, not audio sent — an idle-but-open connection still accrues cost. Design for graceful reconnect on a dropped connection (buffer audio locally during the gap, discard if the buffer exceeds a few seconds) rather than leaving zombie sessions open. Always send an explicit termination message on conversation end — an abandoned session bills for the full 3-hour cap. |
-| Battery | Run on-device VAD (e.g. WebRTC VAD) so the device only opens a streaming session / sends audio when someone is actually speaking, instead of streaming continuously. |
+| Battery | Keep a single streaming session open for the duration of an active conversation (e.g. the ~5 minutes two people are actually talking), rather than opening/closing a session per utterance. Use on-device VAD (e.g. WebRTC VAD) to suppress *sending audio frames* during silence — saving battery and cellular bandwidth — without tearing down the connection itself. Streaming's rate limit is on **new sessions per minute** (5/min free tier, 100+/min paid), not concurrent connections, so a VAD-gated open/close-per-utterance pattern in a fast back-and-forth conversation risks burning through that limit and hitting `1008: Too many concurrent sessions`. Reopening a socket per utterance also adds reconnect latency and would reset whatever rolling conversation context the session had built up. |
 | Real-world noise (street, transit, restaurant) | `voice_focus: near-field`, tuned for close-talking handheld mics specifically (as opposed to `far-field`, meant for conference-room-style distant capture). |
 
 ## Reference implementation
@@ -58,9 +58,11 @@ See [`itranslate.py`](./itranslate.py) — a single-file Python reference client
 
 This is a *reference*, not the production device firmware — it's meant to prove the recommended AssemblyAI configuration and pipeline shape are real and working, so the recommendations above aren't speculative.
 
+The reference is in Python, but every connection parameter used here (`speechModel`, `languageDetection`, `languageCodes`, `voiceFocus`) is exposed identically, camelCased, on AssemblyAI's JavaScript/TypeScript SDK — so iTranslate's frontend or Node.js team can implement this same pipeline shape directly, without needing a Python service in between.
+
 ## Cost model
 
-AssemblyAI Universal-3.5 Pro Streaming: **$0.45/hr of session time** ($0.0075/min), billed on how long the WebSocket stays open — not on how much audio is actually sent. This matters for the VAD recommendation above: only opening a session while someone's actively speaking directly reduces this line item.
+AssemblyAI Universal-3.5 Pro Streaming: **$0.45/hr of session time** ($0.0075/min), billed on how long the WebSocket stays open — not on how much audio is actually sent. This is why the device should open one session per conversation and hold it for that conversation's duration, rather than per utterance: cost scales with conversation-session time either way, and per-utterance sessions would add reconnect overhead and rate-limit risk (see [Deploying on the device](#deploying-on-the-device)) for no cost benefit.
 
 Worked example — a mid-size fleet:
 - 10,000 devices
